@@ -1,10 +1,12 @@
 import './App.css'
+// import DataTest from './components/DataTest'
+import EmployeeTable from './components/EmployeeTable'
 
 function App() {
 
   return (
     <>
-      <h1>Hello</h1>
+      <EmployeeTable />
     </>
   )
 }
