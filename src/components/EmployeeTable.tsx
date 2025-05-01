@@ -77,8 +77,6 @@ export default function EmployeeTable() {
       </div>
       {showForm && (
         <Box sx={{ border: '1px solid #e5e5e5' }}>
-          <p>Add Employee Information</p>
-          {/* Form component goes here */}
           <AddEmployeeForm />
           <Button onClick={() => setShowForm(false)}>Close</Button>
         </Box>

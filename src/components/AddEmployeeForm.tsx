@@ -1,5 +1,5 @@
 import { useState } from 'react';
-import { Grid, TextField, FormControl, InputLabel, Select, MenuItem, FormLabel, FormControlLabel, RadioGroup, Radio } from '@mui/material';
+import { Grid, TextField, FormControl, InputLabel, Select, MenuItem, FormLabel, FormControlLabel, RadioGroup, Radio, Box, Button } from '@mui/material';
 
 type FormData = {
     firstName: string;
@@ -13,7 +13,6 @@ type FormData = {
 
 const AddEmployeeForm:React.FC = () => {
 
-    //form data state
     const [formData, setFormData] = useState<FormData>({
         firstName: '',
         lastName: '',
@@ -24,7 +23,6 @@ const AddEmployeeForm:React.FC = () => {
         profileColour: 'none'
     })
 
-  // Handle text input changes
   const handleInputChange = (e: React.ChangeEvent<HTMLInputElement>) => {
     const { name, value } = e.target;
     setFormData(prev => ({
@@ -67,8 +65,22 @@ const AddEmployeeForm:React.FC = () => {
 
     return (
     <>
+       
         <form onSubmit={handleSubmit}>
-            <Grid container spacing={2}>
+        <Box sx={{ display: 'flex', flexDirection: 'row', justifyContent: 'space-between' }}>
+            <p>Add Employee</p>
+            <div>
+            <Button onClick={handleReset}>Cancel</Button>
+            <Button
+              type="submit"
+              variant="contained"
+              sx={{ backgroundColor: `${formData.profileColour}` }}
+            >
+              Save
+            </Button>
+            </div>
+        </Box>
+            <Grid container spacing={2} >
                 <Grid size={6}>
                     <TextField
                         label="First Name"
