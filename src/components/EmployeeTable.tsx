@@ -1,4 +1,5 @@
 import { useState, useEffect } from 'react';
+import AddEmployeeForm from './AddEmployeeForm';
 import { styled } from '@mui/material';
 import { Container, TableContainer, Table, TableHead, TableBody, TableRow, TableCell, Box, Button } from '@mui/material';
 
@@ -78,6 +79,7 @@ export default function EmployeeTable() {
         <Box sx={{ border: '1px solid #e5e5e5' }}>
           <p>Add Employee Information</p>
           {/* Form component goes here */}
+          <AddEmployeeForm />
           <Button onClick={() => setShowForm(false)}>Close</Button>
         </Box>
       )}
