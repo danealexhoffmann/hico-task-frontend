@@ -1,9 +1,14 @@
 import { useState, useEffect } from 'react';
+import { styled } from '@mui/material';
 import { TableContainer, Table, TableHead, TableBody, TableRow, TableCell } from '@mui/material';
 
 type ApiResponse = {
   message: string;
 }
+
+const StyledTableHead = styled(TableHead)({
+  backgroundColor: '#f5f5f5',
+});
 
 export default function EmployeeTable() {
 
@@ -41,7 +46,7 @@ export default function EmployeeTable() {
       <p>Current Employees</p>
       <TableContainer>
         <Table>
-          <TableHead>
+          <StyledTableHead>
             <TableRow>
               <TableCell>Employee #</TableCell>
               <TableCell>First Name</TableCell>
@@ -49,10 +54,10 @@ export default function EmployeeTable() {
               <TableCell>Salutation</TableCell>
               <TableCell>Profile Colour</TableCell>
             </TableRow>
-          </TableHead>
+          </StyledTableHead>
           <TableBody>
             {data.message.map(item =>
-              <TableRow key={item.id}>
+              <TableRow key={item.id} sx={{ backgroundColor: item.profile_colour }}>
                 <TableCell>{item.employee_number}</TableCell>
                 <TableCell>{item.first_name}</TableCell>
                 <TableCell>{item.last_name}</TableCell>
