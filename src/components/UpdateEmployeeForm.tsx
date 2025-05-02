@@ -1,15 +1,19 @@
-import { useState } from 'react';
+
+import { useState, useEffect } from 'react';
 import { Grid, TextField, FormControl, InputLabel, Select, MenuItem, FormLabel, FormControlLabel, RadioGroup, Radio, Box, Button, Stack } from '@mui/material';
 import { SelectChangeEvent } from '@mui/material/Select';
 
-type FormData = {
-    firstName: string;
-    lastName: string;
-    salutation: '' | 'dr' | 'mr' | 'mrs' | 'ms' | 'mx';
-    gender: '' | 'male' | 'female' | 'unspecified';
-    employeeNumber: number; 
-    grossSalary: number;
-    profileColour: 'green' | 'blue' | 'red' | 'none';
+type UpdateEmployeeFormProps = {
+    employee: {
+        id: number;
+        first_name: string;
+        last_name: string;
+        salutation: '' | 'dr' | 'mr' | 'mrs' | 'ms' | 'mx';
+        gender: '' | 'male' | 'female' | 'unspecified';
+        employee_number: number; 
+        gross_salary: number;
+        profile_colour: 'green' | 'blue' | 'red' | 'none';
+    }
 };
 
 type ApiResponse = {
@@ -19,20 +23,34 @@ type ApiResponse = {
 }
 
 
-const AddEmployeeForm:React.FC = () => {
+const UpdateEmployeeForm:React.FC<UpdateEmployeeFormProps> = ({ employee }: UpdateEmployeeFormProps ) => {
 
-
+    console.log('employee', employee);
     const [formattedSalary, setFormattedSalary] = useState<string>('');
 
-    const [formData, setFormData] = useState<FormData>({
-        firstName: '',
-        lastName: '',
-        salutation: '',
+    const [formData, setFormData] = useState({
+        firstName: employee.first_name,
+        lastName: employee.last_name,
+        salutation: employee.salutation,
         gender: '',
-        employeeNumber: 0,
-        grossSalary: 0,
-        profileColour: 'none'
+        employeeNumber: employee.employee_number,
+        grossSalary: employee.gross_salary,
+        profileColour: employee.profile_colour
     })
+
+    useEffect(() => {
+        if (employee) {
+            setFormData({
+                firstName: employee.first_name,
+                lastName: employee.last_name,
+                salutation: employee.salutation,
+                gender: employee.gender,
+                employeeNumber: employee.employee_number,
+                grossSalary: employee.gross_salary,
+                profileColour: employee.profile_colour
+            });
+        }
+    }, [employee]);
 
   const handleInputChange = (e: React.ChangeEvent<HTMLInputElement>) => {
     const { name, value } = e.target;
@@ -100,7 +118,8 @@ const AddEmployeeForm:React.FC = () => {
   const handleSubmit = async (e: React.FormEvent) => {
     e.preventDefault();
   
-    const newEmployeeData = {
+    const updatedEmployeeData = {
+        id: employee.id,
         firstName: formData.firstName,
         lastName: formData.lastName,
         salutation: formData.salutation,
@@ -111,34 +130,24 @@ const AddEmployeeForm:React.FC = () => {
     }
 
     try {
-        const response = await fetch('/api/employees', {
-            method: 'POST',
+        const response = await fetch(`/api/employees/${employee.id}`, {
+            method: 'PUT',
             headers: {
                 'Content-Type': 'application/json',
             },
-            body: JSON.stringify(newEmployeeData),
+            body: JSON.stringify(updatedEmployeeData),
         });
 
         const data: ApiResponse = await response.json();
         if (!response.ok) {
-            throw new Error(data.error || 'Failed to add employee');
+            throw new Error(data.error || 'Failed to update employee');
         }
-
-        console.log('Employee added successfully:', data);
-        alert('Employee added successfully');
-
-        setFormData({
-            firstName: '',
-            lastName: '',
-            salutation: '',
-            gender: '',
-            employeeNumber: 0,
-            grossSalary: 0,
-            profileColour: 'none'
-        })
+        alert('Employee updated successfully');
+        console.log('Employee updated successfully:', data);
+        
     } catch (error) {
         console.error('Error adding employee:', error);
-        alert('Failed to add employee. Please try again.');
+        alert('Failed to update employee. Please try again.');
     }
 };
 
@@ -159,7 +168,7 @@ const AddEmployeeForm:React.FC = () => {
     <>
         <form onSubmit={handleSubmit}>
         <Box sx={{ display: 'flex', flexDirection: 'row', justifyContent: 'space-between' }}>
-            <p>Add Employee</p>
+            <p>Update Employee</p>
             <div>
             <Button onClick={handleReset}>Cancel</Button>
             <Button
@@ -264,4 +273,4 @@ const AddEmployeeForm:React.FC = () => {
     </>)
 }
 
-export default AddEmployeeForm;
+export default UpdateEmployeeForm;
