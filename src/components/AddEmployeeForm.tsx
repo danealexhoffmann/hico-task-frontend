@@ -65,10 +65,28 @@ const AddEmployeeForm:React.FC = () => {
 
   const handleSelectChange = (e: SelectChangeEvent<string>) => {
     const { name, value } = e.target;
-    setFormData(prev => ({
-      ...prev,
-      [name]: value
-    }));
+
+    const updatedData = {
+        ...formData,
+        [name]: value
+    };
+
+    if (name === 'salutation') {
+        switch (value) {
+            case 'mr':
+              updatedData.gender = 'male';
+              break;
+            case 'mrs':
+            case 'ms':
+              updatedData.gender = 'female';
+              break;
+            default:
+              // Don't update for gender nueutral options
+              break;
+    }
+}
+
+    setFormData(updatedData);
   };
 
   const handleRadioChange = (e: React.ChangeEvent<HTMLInputElement>) => {
