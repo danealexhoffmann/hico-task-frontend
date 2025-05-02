@@ -76,7 +76,7 @@ export default function EmployeeTable() {
       </TableContainer>
       </div>
       {showForm && (
-        <Box sx={{ border: '1px solid #e5e5e5' }}>
+        <Box sx={{ border: '1px solid #e5e5e5', padding: '20px', borderRadius: '8px' }}>
           <AddEmployeeForm />
           <Button onClick={() => setShowForm(false)}>Close</Button>
         </Box>

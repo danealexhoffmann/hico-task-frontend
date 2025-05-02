@@ -1,13 +1,14 @@
 import { useState } from 'react';
-import { Grid, TextField, FormControl, InputLabel, Select, MenuItem, FormLabel, FormControlLabel, RadioGroup, Radio, Box, Button } from '@mui/material';
+import { Grid, TextField, FormControl, InputLabel, Select, MenuItem, FormLabel, FormControlLabel, RadioGroup, Radio, Box, Button, Stack } from '@mui/material';
+import { SelectChangeEvent } from '@mui/material/Select';
 
 type FormData = {
     firstName: string;
     lastName: string;
     salutation: string;
     gender: string;
-    employeeNumber: number; 
-    grossSalary: number;
+    employeeNumber: number | null; 
+    grossSalary: number | null;
     profileColour: string;
 };
 
@@ -16,19 +17,27 @@ const AddEmployeeForm:React.FC = () => {
     const [formData, setFormData] = useState<FormData>({
         firstName: '',
         lastName: '',
-        salutation: 'Mx',
-        gender: 'unspecified',
-        employeeNumber: 0,
-        grossSalary: 0,
+        salutation: '',
+        gender: '',
+        employeeNumber: null,
+        grossSalary: null,
         profileColour: 'none'
     })
 
   const handleInputChange = (e: React.ChangeEvent<HTMLInputElement>) => {
     const { name, value } = e.target;
+
+    if (name === 'employeeNumber' || name === 'grossSalary') {
+        setFormData(prev => ({
+            ...prev,
+            [name]: value ? parseFloat(value) : null
+        }));
+    } else {
     setFormData(prev => ({
       ...prev,
       [name]: value
     }));
+    }
   };
 
   const handleSelectChange = (e: SelectChangeEvent<string>) => {
@@ -40,9 +49,10 @@ const AddEmployeeForm:React.FC = () => {
   };
 
   const handleRadioChange = (e: React.ChangeEvent<HTMLInputElement>) => {
+    const { name, value } = e.target;
     setFormData(prev => ({
       ...prev,
-      subscription: e.target.value
+      [name]: value
     }));
   };
   
@@ -56,16 +66,15 @@ const AddEmployeeForm:React.FC = () => {
         firstName: '',
         lastName: '',
         salutation: '',
-        gender: 'unspecified',
-        employeeNumber: 0,
-        grossSalary: 0,
+        gender: '',
+        employeeNumber: null,
+        grossSalary: null,
         profileColour: 'none'
     })
   }
 
     return (
     <>
-       
         <form onSubmit={handleSubmit}>
         <Box sx={{ display: 'flex', flexDirection: 'row', justifyContent: 'space-between' }}>
             <p>Add Employee</p>
@@ -80,8 +89,9 @@ const AddEmployeeForm:React.FC = () => {
             </Button>
             </div>
         </Box>
-            <Grid container spacing={2} >
+            <Grid container spacing={8} >
                 <Grid size={6}>
+                    <Stack gap={2}>
                     <TextField
                         label="First Name"
                         name="firstName"
@@ -105,10 +115,10 @@ const AddEmployeeForm:React.FC = () => {
                             onChange={handleSelectChange}
                             fullWidth
                         >
-                            <MenuItem value="Mr">Mr</MenuItem>
-                            <MenuItem value="Mrs">Mrs</MenuItem>
-                            <MenuItem value="Ms">Ms</MenuItem>
-                            <MenuItem value="Mx">Mx</MenuItem>
+                            <MenuItem value="mr">Mr</MenuItem>
+                            <MenuItem value="mrs">Mrs</MenuItem>
+                            <MenuItem value="ms">Ms</MenuItem>
+                            <MenuItem value="mx">Mx</MenuItem>
                         </Select> 
                     </FormControl>
                     <FormControl component="fieldset">
@@ -131,9 +141,11 @@ const AddEmployeeForm:React.FC = () => {
                         onChange={handleInputChange}
                         fullWidth
                     />
+                    </Stack>
                 </Grid>
 
                 <Grid size={6}>
+                    <Stack gap={2}>
                     <TextField
                         label="Full Name"
                         name="fullName"
@@ -162,6 +174,7 @@ const AddEmployeeForm:React.FC = () => {
                             <FormControlLabel value="none" control={<Radio />} label="Default"/>
                         </RadioGroup> 
                     </FormControl>
+                    </Stack>
                 </Grid>
             </Grid>
         </form>
