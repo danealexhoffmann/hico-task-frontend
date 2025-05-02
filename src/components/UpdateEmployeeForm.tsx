@@ -123,7 +123,7 @@ const UpdateEmployeeForm:React.FC<UpdateEmployeeFormProps> = ({ employee }: Upda
         firstName: formData.firstName,
         lastName: formData.lastName,
         salutation: formData.salutation,
-        // gender: formData.gender,
+        gender: formData.gender,
         employeeNumber: formData.employeeNumber,
         grossSalary: formData.grossSalary,
         profileColour: formData.profileColour
