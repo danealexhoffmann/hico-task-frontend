@@ -153,13 +153,13 @@ const UpdateEmployeeForm:React.FC<UpdateEmployeeFormProps> = ({ employee }: Upda
 
   const handleReset = () => {
     setFormData({
-        firstName: '',
-        lastName: '',
-        salutation: '',
-        gender: '',
-        employeeNumber: 0,
-        grossSalary: 0,
-        profileColour: 'none'
+        firstName: employee.first_name,
+        lastName: employee.last_name,
+        salutation: employee.salutation,
+        gender: employee.gender,
+        employeeNumber: employee.employee_number,
+        grossSalary: employee.gross_salary,
+        profileColour: employee.profile_colour
     });
     setFormattedSalary('');
   }
