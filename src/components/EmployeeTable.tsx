@@ -12,6 +12,16 @@ const StyledTableHead = styled(TableHead)({
   backgroundColor: '#f5f5f5',
 });
 
+const getDisplayColor = (dbColor: string): string => {
+  const colorMap: Record<string, string> = {
+    'red': '#ffcccc', 
+    'green': '#ccffcc',
+    'blue': '#ccccff',
+  };
+  
+  return colorMap[dbColor.toLowerCase()] || dbColor;
+};
+
 export default function EmployeeTable() {
 
   const [data, setData] = useState<ApiResponse | null>(null);
@@ -78,7 +88,7 @@ export default function EmployeeTable() {
           </StyledTableHead>
           <TableBody>
             {data?.message.map(item =>
-              <TableRow onClick={() => handleEmployeeFormDisplay('update', item)} key={item.id} sx={{ backgroundColor: item.profile_colour, cursor: 'pointer' }}>
+              <TableRow onClick={() => handleEmployeeFormDisplay('update', item)} key={item.id} sx={{ backgroundColor: getDisplayColor(item.profile_colour), cursor: 'pointer' }}>
                 <TableCell>{item.employee_number}</TableCell>
                 <TableCell>{item.first_name}</TableCell>
                 <TableCell>{item.last_name}</TableCell>
