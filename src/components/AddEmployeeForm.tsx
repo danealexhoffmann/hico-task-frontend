@@ -18,7 +18,11 @@ type ApiResponse = {
     error?: string;
 }
 
+
 const AddEmployeeForm:React.FC = () => {
+
+
+    const [formattedSalary, setFormattedSalary] = useState<string>('');
 
     const [formData, setFormData] = useState<FormData>({
         firstName: '',
@@ -33,15 +37,28 @@ const AddEmployeeForm:React.FC = () => {
   const handleInputChange = (e: React.ChangeEvent<HTMLInputElement>) => {
     const { name, value } = e.target;
 
-    if (name === 'employeeNumber' || name === 'grossSalary') {
+    if (name === 'employeeNumber') {
         setFormData(prev => ({
             ...prev,
             [name]: value ? parseFloat(value) : 0
         }));
+    } else if (name === 'grossSalary') {
+       const numOnlyValue = value.replace(/\D/g, ''); 
+
+
+       setFormData(prev => ({
+        ...prev,
+        [name]: numOnlyValue ? parseFloat(numOnlyValue) : 0
+       }))
+
+       const formattedNumValue = numOnlyValue.replace(/\B(?=(\d{3})+(?!\d))/g, ' ');
+       setFormattedSalary(formattedNumValue);
+        
     } else {
+    const sanitizedValue = value.replace(/[^a-zA-Z\s\-\u00C0-\u024F]/g, '');
     setFormData(prev => ({
       ...prev,
-      [name]: value
+      [name]: sanitizedValue
     }));
     }
   };
@@ -113,7 +130,8 @@ const AddEmployeeForm:React.FC = () => {
         employeeNumber: 0,
         grossSalary: 0,
         profileColour: 'none'
-    })
+    });
+    setFormattedSalary('');
   }
 
     return (
@@ -200,7 +218,7 @@ const AddEmployeeForm:React.FC = () => {
                      <TextField
                         label="Gross Salary $PY"
                         name="grossSalary"
-                        value={formData.grossSalary}
+                        value={formattedSalary}
                         onChange={handleInputChange}
                         fullWidth
                     /> 
