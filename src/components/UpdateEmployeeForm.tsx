@@ -8,7 +8,7 @@ type UpdateEmployeeFormProps = {
         id: number;
         first_name: string;
         last_name: string;
-        salutation: 'dr' | 'mr' | 'mrs' | 'ms' | 'mx';
+        salutation: 'Dr' | 'Mr' | 'Mrs' | 'Ms' | 'Mx';
         gender: 'male' | 'female' | 'unspecified';
         employee_number: number; 
         gross_salary: number;
@@ -91,11 +91,11 @@ const UpdateEmployeeForm:React.FC<UpdateEmployeeFormProps> = ({ employee }: Upda
 
     if (name === 'salutation') {
         switch (value) {
-            case 'mr':
+            case 'Mr':
               updatedData.gender = 'male';
               break;
-            case 'mrs':
-            case 'ms':
+            case 'Mrs':
+            case 'Ms':
               updatedData.gender = 'female';
               break;
             default:
@@ -206,11 +206,11 @@ const UpdateEmployeeForm:React.FC<UpdateEmployeeFormProps> = ({ employee }: Upda
                             onChange={handleSelectChange}
                             fullWidth
                         >
-                            <MenuItem value="dr">Dr</MenuItem>
-                            <MenuItem value="mr">Mr</MenuItem>
-                            <MenuItem value="mrs">Mrs</MenuItem>
-                            <MenuItem value="ms">Ms</MenuItem>
-                            <MenuItem value="mx">Mx</MenuItem>
+                            <MenuItem value="Dr">Dr</MenuItem>
+                            <MenuItem value="Mr">Mr</MenuItem>
+                            <MenuItem value="Mrs">Mrs</MenuItem>
+                            <MenuItem value="Ms">Ms</MenuItem>
+                            <MenuItem value="Mx">Mx</MenuItem>
                         </Select> 
                     </FormControl>
                     <FormControl component="fieldset">

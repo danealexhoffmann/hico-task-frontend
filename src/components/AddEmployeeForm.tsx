@@ -5,7 +5,7 @@ import { SelectChangeEvent } from '@mui/material/Select';
 type FormData = {
     firstName: string;
     lastName: string;
-    salutation: '' | 'dr' | 'mr' | 'mrs' | 'ms' | 'mx';
+    salutation: '' | 'Dr' | 'Mr' | 'Mrs' | 'Ms' | 'Mx';
     gender: '' | 'male' | 'female' | 'unspecified';
     employeeNumber: number; 
     grossSalary: number;
@@ -73,11 +73,11 @@ const AddEmployeeForm:React.FC = () => {
 
     if (name === 'salutation') {
         switch (value) {
-            case 'mr':
+            case 'Mr':
               updatedData.gender = 'male';
               break;
-            case 'mrs':
-            case 'ms':
+            case 'Mrs':
+            case 'Ms':
               updatedData.gender = 'female';
               break;
             default:
@@ -104,7 +104,7 @@ const AddEmployeeForm:React.FC = () => {
         firstName: formData.firstName,
         lastName: formData.lastName,
         salutation: formData.salutation,
-        // gender: formData.gender,
+        gender: formData.gender,
         employeeNumber: formData.employeeNumber,
         grossSalary: formData.grossSalary,
         profileColour: formData.profileColour
@@ -197,11 +197,11 @@ const AddEmployeeForm:React.FC = () => {
                             onChange={handleSelectChange}
                             fullWidth
                         >
-                            <MenuItem value="dr">Dr</MenuItem>
-                            <MenuItem value="mr">Mr</MenuItem>
-                            <MenuItem value="mrs">Mrs</MenuItem>
-                            <MenuItem value="ms">Ms</MenuItem>
-                            <MenuItem value="mx">Mx</MenuItem>
+                            <MenuItem value="Dr">Dr</MenuItem>
+                            <MenuItem value="Mr">Mr</MenuItem>
+                            <MenuItem value="Mrs">Mrs</MenuItem>
+                            <MenuItem value="Ms">Ms</MenuItem>
+                            <MenuItem value="Mx">Mx</MenuItem>
                         </Select> 
                     </FormControl>
                     <FormControl component="fieldset">
