@@ -8,8 +8,8 @@ type UpdateEmployeeFormProps = {
         id: number;
         first_name: string;
         last_name: string;
-        salutation: '' | 'dr' | 'mr' | 'mrs' | 'ms' | 'mx';
-        gender: '' | 'male' | 'female' | 'unspecified';
+        salutation: 'dr' | 'mr' | 'mrs' | 'ms' | 'mx';
+        gender: 'male' | 'female' | 'unspecified';
         employee_number: number; 
         gross_salary: number;
         profile_colour: 'green' | 'blue' | 'red' | 'none';
@@ -32,7 +32,7 @@ const UpdateEmployeeForm:React.FC<UpdateEmployeeFormProps> = ({ employee }: Upda
         firstName: employee.first_name,
         lastName: employee.last_name,
         salutation: employee.salutation,
-        gender: '',
+        gender: employee.gender,
         employeeNumber: employee.employee_number,
         grossSalary: employee.gross_salary,
         profileColour: employee.profile_colour
