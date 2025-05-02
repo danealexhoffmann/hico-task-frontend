@@ -5,12 +5,18 @@ import { SelectChangeEvent } from '@mui/material/Select';
 type FormData = {
     firstName: string;
     lastName: string;
-    salutation: string;
-    gender: string;
-    employeeNumber: number | null; 
-    grossSalary: number | null;
-    profileColour: string;
+    salutation: '' | 'dr' | 'mr' | 'mrs' | 'ms' | 'mx';
+    gender: '' | 'male' | 'female' | 'unspecified';
+    employeeNumber: number; 
+    grossSalary: number;
+    profileColour: 'green' | 'blue' | 'red' | 'none';
 };
+
+type ApiResponse = {
+    message: string;
+    employeeNumber: number;
+    error?: string;
+}
 
 const AddEmployeeForm:React.FC = () => {
 
@@ -19,8 +25,8 @@ const AddEmployeeForm:React.FC = () => {
         lastName: '',
         salutation: '',
         gender: '',
-        employeeNumber: null,
-        grossSalary: null,
+        employeeNumber: 0,
+        grossSalary: 0,
         profileColour: 'none'
     })
 
@@ -30,7 +36,7 @@ const AddEmployeeForm:React.FC = () => {
     if (name === 'employeeNumber' || name === 'grossSalary') {
         setFormData(prev => ({
             ...prev,
-            [name]: value ? parseFloat(value) : null
+            [name]: value ? parseFloat(value) : 0
         }));
     } else {
     setFormData(prev => ({
@@ -56,10 +62,47 @@ const AddEmployeeForm:React.FC = () => {
     }));
   };
   
-  const handleSubmit = (e: React.FormEvent) => {
+  const handleSubmit = async (e: React.FormEvent) => {
     e.preventDefault();
-    console.log('Form submitted:', formData);
-  };
+  
+    const newEmployeeData = {
+        firstName: formData.firstName,
+        lastName: formData.lastName,
+        salutation: formData.salutation,
+        // gender: formData.gender,
+        employeeNumber: formData.employeeNumber,
+        grossSalary: formData.grossSalary,
+        profileColour: formData.profileColour
+    }
+
+    try {
+        const response = await fetch('/api/employees', {
+            method: 'POST',
+            headers: {
+                'Content-Type': 'application/json',
+            },
+            body: JSON.stringify(newEmployeeData),
+        });
+
+        const data: ApiResponse = await response.json();
+        if (!response.ok) {
+            throw new Error(data.error || 'Failed to add employee');
+        }
+        console.log('Employee added successfully:', data);
+        setFormData({
+            firstName: '',
+            lastName: '',
+            salutation: '',
+            gender: '',
+            employeeNumber: 0,
+            grossSalary: 0,
+            profileColour: 'none'
+        })
+    } catch (error) {
+        console.error('Error adding employee:', error);
+        alert('Failed to add employee. Please try again.');
+    }
+};
 
   const handleReset = () => {
     setFormData({
@@ -67,8 +110,8 @@ const AddEmployeeForm:React.FC = () => {
         lastName: '',
         salutation: '',
         gender: '',
-        employeeNumber: null,
-        grossSalary: null,
+        employeeNumber: 0,
+        grossSalary: 0,
         profileColour: 'none'
     })
   }
@@ -115,6 +158,7 @@ const AddEmployeeForm:React.FC = () => {
                             onChange={handleSelectChange}
                             fullWidth
                         >
+                            <MenuItem value="dr">Dr</MenuItem>
                             <MenuItem value="mr">Mr</MenuItem>
                             <MenuItem value="mrs">Mrs</MenuItem>
                             <MenuItem value="ms">Ms</MenuItem>
