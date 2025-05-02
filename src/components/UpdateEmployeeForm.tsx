@@ -201,6 +201,7 @@ const UpdateEmployeeForm:React.FC<UpdateEmployeeFormProps> = ({ employee }: Upda
                         <InputLabel id="salutation-label">Salutation</InputLabel>
                         <Select
                             labelId="salutation-label"
+                            label="Salutation"
                             name="salutation"
                             value={formData.salutation}
                             onChange={handleSelectChange}

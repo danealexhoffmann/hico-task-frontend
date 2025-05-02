@@ -188,10 +188,11 @@ const AddEmployeeForm:React.FC = () => {
                         onChange={handleInputChange}
                         fullWidth
                     />
-                    <FormControl fullWidth>
+                    <FormControl fullWidth >
                         <InputLabel id="salutation-label">Salutation</InputLabel>
                         <Select
                             labelId="salutation-label"
+                            label="Salutation"
                             name="salutation"
                             value={formData.salutation}
                             onChange={handleSelectChange}
