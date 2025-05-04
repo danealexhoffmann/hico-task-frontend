@@ -2,7 +2,7 @@ import { useState, useEffect } from 'react';
 import AddEmployeeForm from './AddEmployeeForm';
 import UpdateEmployeeForm from './UpdateEmployeeForm';
 import { styled } from '@mui/material';
-import { Container, TableContainer, Table, TableHead, TableBody, TableRow, TableCell, Box, Button } from '@mui/material';
+import { Container, TableContainer, Table, TableHead, TableBody, TableRow, TableCell, Box, Button, Typography } from '@mui/material';
 
 type ApiResponse = {
   message: string;
@@ -71,9 +71,9 @@ export default function EmployeeTable() {
   return (
     <Container sx={{ display:'flex', flexDirection: 'column', gap: '16px' }}>
       <div>
-      <Box sx={{ display: 'flex', flexDirection: 'row', justifyContent: 'space-between' }}>
-        <p>Current Employees</p>
-        <Button onClick={() => handleEmployeeFormDisplay('add', null)}>add employee</Button>
+      <Box sx={{ display: 'flex', flexDirection: 'row', justifyContent: 'space-between', alignItems: 'center', marginBottom: '16px' }}>
+        <Typography variant='subtitle2'>Current Employees</Typography>
+        <Button variant='contained' onClick={() => handleEmployeeFormDisplay('add', null)}>add employee</Button>
       </Box>
       <TableContainer>
         <Table>
