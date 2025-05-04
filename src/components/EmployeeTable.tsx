@@ -19,7 +19,7 @@ const getDisplayColor = (dbColor: string): string => {
     'blue': '#ccccff',
   };
   
-  return colorMap[dbColor.toLowerCase()] || dbColor;
+  return colorMap[dbColor] || dbColor;
 };
 
 export default function EmployeeTable() {
