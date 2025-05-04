@@ -18,9 +18,18 @@ type ApiResponse = {
     error?: string;
 }
 
+const getDisplayColor = (dbColor: string): string => {
+    const colorMap: Record<string, string> = {
+      'red': '#ffcccc', 
+      'green': '#ccffcc',
+      'blue': '#ccccff',
+    };
+    
+    return colorMap[dbColor] || dbColor;
+  };
+
 
 const AddEmployeeForm:React.FC = () => {
-
 
     const [formattedSalary, setFormattedSalary] = useState<string>('');
 
@@ -81,7 +90,7 @@ const AddEmployeeForm:React.FC = () => {
               updatedData.gender = 'female';
               break;
             default:
-              // Don't update for gender nueutral options
+              // Don't update for gender neutral options
               break;
     }
 }
@@ -165,7 +174,7 @@ const AddEmployeeForm:React.FC = () => {
             <Button
               type="submit"
               variant="contained"
-              sx={{ backgroundColor: `${formData.profileColour}` }}
+              sx={{ backgroundColor: getDisplayColor(`${formData.profileColour}`), color: formData.profileColour === 'none' ? 'white' : 'black' }}
             >
               Save
             </Button>

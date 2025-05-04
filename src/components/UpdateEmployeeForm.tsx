@@ -1,6 +1,5 @@
-
 import { useState, useEffect } from 'react';
-import { Grid, TextField, FormControl, InputLabel, Select, MenuItem, FormLabel, FormControlLabel, RadioGroup, Radio, Box, Button, Stack } from '@mui/material';
+import { Typography, Grid, TextField, FormControl, InputLabel, Select, MenuItem, FormLabel, FormControlLabel, RadioGroup, Radio, Box, Button, Stack } from '@mui/material';
 import { SelectChangeEvent } from '@mui/material/Select';
 
 type UpdateEmployeeFormProps = {
@@ -22,6 +21,15 @@ type ApiResponse = {
     error?: string;
 }
 
+const getDisplayColor = (dbColor: string): string => {
+    const colorMap: Record<string, string> = {
+      'red': '#ffcccc', 
+      'green': '#ccffcc',
+      'blue': '#ccccff',
+    };
+    
+    return colorMap[dbColor] || dbColor;
+  };
 
 const UpdateEmployeeForm:React.FC<UpdateEmployeeFormProps> = ({ employee }: UpdateEmployeeFormProps ) => {
 
@@ -167,14 +175,14 @@ const UpdateEmployeeForm:React.FC<UpdateEmployeeFormProps> = ({ employee }: Upda
     return (
     <>
         <form onSubmit={handleSubmit}>
-        <Box sx={{ display: 'flex', flexDirection: 'row', justifyContent: 'space-between' }}>
-            <p>Update Employee</p>
+        <Box sx={{ display: 'flex', flexDirection: 'row', justifyContent: 'space-between', alignItems: 'center', marginBottom: '16px' }}>
+            <Typography variant="subtitle2">Update Employee</Typography>
             <div>
             <Button onClick={handleReset}>Cancel</Button>
             <Button
               type="submit"
               variant="contained"
-              sx={{ backgroundColor: `${formData.profileColour}` }}
+              sx={{ backgroundColor: getDisplayColor(`${formData.profileColour}`), color: formData.profileColour === 'none' ? 'white' : 'black' }}
             >
               Save
             </Button>
