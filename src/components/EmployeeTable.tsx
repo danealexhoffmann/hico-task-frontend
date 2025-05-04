@@ -69,7 +69,7 @@ export default function EmployeeTable() {
   if (error) return <div>Error: {error}</div>;
 
   return (
-    <Container sx={{ display:'flex', flexDirection: 'column', gap: '100px' }}>
+    <Container sx={{ display:'flex', flexDirection: 'column', gap: '16px' }}>
       <div>
       <Box sx={{ display: 'flex', flexDirection: 'row', justifyContent: 'space-between' }}>
         <p>Current Employees</p>
