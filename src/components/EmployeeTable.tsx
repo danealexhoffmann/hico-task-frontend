@@ -2,7 +2,7 @@ import { useState, useEffect } from 'react';
 import AddEmployeeForm from './AddEmployeeForm';
 import UpdateEmployeeForm from './UpdateEmployeeForm';
 import { styled } from '@mui/material';
-import { Container, TableContainer, Table, TableHead, TableBody, TableRow, TableCell, Box, Button, Typography } from '@mui/material';
+import { Container, TableContainer, Table, TableHead, TableBody, TableRow, TableCell, Box, Button, Typography, Stack } from '@mui/material';
 
 type ApiResponse = {
   message: string;
@@ -102,14 +102,18 @@ export default function EmployeeTable() {
       </div>
       {showAddEmployeeForm && (
         <Box sx={{ border: '1px solid #e5e5e5', padding: '20px', borderRadius: '8px' }}>
+          <Stack gap={2}>
           <AddEmployeeForm />
-          <Button onClick={() => setShowAddEmployeeForm(false)}>Close</Button>
+          <Button variant="contained" onClick={() => setShowAddEmployeeForm(false)}>Close</Button>
+          </Stack>
         </Box>
       )}
       {showUpdateEmployeeForm && (
         <Box sx={{ border: '1px solid #e5e5e5', padding: '20px', borderRadius: '8px' }}>
+          <Stack gap={2}>
           <UpdateEmployeeForm employee={selectedEmployee} />
-          <Button onClick={() => setShowUpdateEmployeeForm(false)}>Close</Button>
+          <Button variant="contained" onClick={() => setShowUpdateEmployeeForm(false)}>Close</Button>
+          </Stack>
         </Box>
       )}
     </Container>

@@ -1,5 +1,5 @@
 import { useState } from 'react';
-import { Grid, TextField, FormControl, InputLabel, Select, MenuItem, FormLabel, FormControlLabel, RadioGroup, Radio, Box, Button, Stack } from '@mui/material';
+import { Typography, Grid, TextField, FormControl, InputLabel, Select, MenuItem, FormLabel, FormControlLabel, RadioGroup, Radio, Box, Button, Stack } from '@mui/material';
 import { SelectChangeEvent } from '@mui/material/Select';
 
 type FormData = {
@@ -158,8 +158,8 @@ const AddEmployeeForm:React.FC = () => {
     return (
     <>
         <form onSubmit={handleSubmit}>
-        <Box sx={{ display: 'flex', flexDirection: 'row', justifyContent: 'space-between' }}>
-            <p>Add Employee</p>
+        <Box sx={{ display: 'flex', flexDirection: 'row', justifyContent: 'space-between', alignItems: 'center', marginBottom: '16px' }}>
+            <Typography variant='subtitle2'>Add Employee</Typography>
             <div>
             <Button onClick={handleReset}>Cancel</Button>
             <Button
