@@ -11,7 +11,7 @@ type UpdateEmployeeFormProps = {
         salutation: 'Dr' | 'Mr' | 'Mrs' | 'Ms' | 'Mx';
         gender: 'male' | 'female' | 'unspecified';
         employee_number: number; 
-        gross_salary: number;
+        gross_salary: string;
         profile_colour: 'green' | 'blue' | 'red' | 'none';
     }
 };
@@ -25,8 +25,10 @@ type ApiResponse = {
 
 const UpdateEmployeeForm:React.FC<UpdateEmployeeFormProps> = ({ employee }: UpdateEmployeeFormProps ) => {
 
-    console.log('employee', employee);
-    const [formattedSalary, setFormattedSalary] = useState<string>('');
+    const formatSalaryValue = (salaryString: string) => {
+        const formattedString = salaryString.replace(/\B(?=(\d{3})+(?!\d))/g, ' ');
+        return formattedString;
+    } 
 
     const [formData, setFormData] = useState({
         firstName: employee.first_name,
@@ -34,7 +36,7 @@ const UpdateEmployeeForm:React.FC<UpdateEmployeeFormProps> = ({ employee }: Upda
         salutation: employee.salutation,
         gender: employee.gender,
         employeeNumber: employee.employee_number,
-        grossSalary: employee.gross_salary,
+        grossSalary: formatSalaryValue(employee.gross_salary),
         profileColour: employee.profile_colour
     })
 
@@ -46,7 +48,7 @@ const UpdateEmployeeForm:React.FC<UpdateEmployeeFormProps> = ({ employee }: Upda
                 salutation: employee.salutation,
                 gender: employee.gender,
                 employeeNumber: employee.employee_number,
-                grossSalary: employee.gross_salary,
+                grossSalary: formatSalaryValue(employee.gross_salary),
                 profileColour: employee.profile_colour
             });
         }
@@ -60,19 +62,18 @@ const UpdateEmployeeForm:React.FC<UpdateEmployeeFormProps> = ({ employee }: Upda
             ...prev,
             [name]: value ? parseFloat(value) : 0
         }));
-    } else if (name === 'grossSalary') {
-       const numOnlyValue = value.replace(/\D/g, ''); 
+    } 
+    else if (name === 'grossSalary') {
 
-
-       setFormData(prev => ({
-        ...prev,
-        [name]: numOnlyValue ? parseFloat(numOnlyValue) : 0
-       }))
-
-       const formattedNumValue = numOnlyValue.replace(/\B(?=(\d{3})+(?!\d))/g, ' ');
-       setFormattedSalary(formattedNumValue);
+        const numericString = value.replace(/[^\d]/g, '');
+        const formattedNumericString = formatSalaryValue(numericString);
         
-    } else {
+        setFormData(prev => ({
+            ...prev,
+            [name]: formattedNumericString
+        }));
+    } 
+    else {
     const sanitizedValue = value.replace(/[^a-zA-Z\s\-\u00C0-\u024F]/g, '');
     setFormData(prev => ({
       ...prev,
@@ -161,7 +162,6 @@ const UpdateEmployeeForm:React.FC<UpdateEmployeeFormProps> = ({ employee }: Upda
         grossSalary: employee.gross_salary,
         profileColour: employee.profile_colour
     });
-    setFormattedSalary('');
   }
 
     return (
@@ -249,7 +249,7 @@ const UpdateEmployeeForm:React.FC<UpdateEmployeeFormProps> = ({ employee }: Upda
                      <TextField
                         label="Gross Salary $PY"
                         name="grossSalary"
-                        value={formattedSalary}
+                        value={formData.grossSalary}
                         onChange={handleInputChange}
                         fullWidth
                     /> 
