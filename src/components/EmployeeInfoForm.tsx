@@ -13,6 +13,7 @@ type EmployeeInfoFormProps = {
         gross_salary: string;
         profile_colour: 'green' | 'blue' | 'red' | 'none';
     }
+    onSuccess: () => void;
 };
 
 type ApiResponse = {
@@ -31,7 +32,7 @@ const getDisplayColor = (dbColor: string): string => {
     return colorMap[dbColor] || dbColor;
   };
 
-const EmployeeInfoForm:React.FC<EmployeeInfoFormProps> = ({ employee }: EmployeeInfoFormProps ) => {
+const EmployeeInfoForm:React.FC<EmployeeInfoFormProps> = ({ employee, onSuccess }: EmployeeInfoFormProps ) => {
 
     const [formData, setFormData] = useState({
         firstName: '',
@@ -155,7 +156,8 @@ const EmployeeInfoForm:React.FC<EmployeeInfoFormProps> = ({ employee }: Employee
             if (!response.ok) {
                 throw new Error(data.error || 'Failed to update employee');
             }
-            alert('Employee updated successfully');
+            // alert('Employee updated successfully');
+            onSuccess();
             console.log('Employee updated successfully:', data);
             
         } catch (error) {
@@ -190,7 +192,8 @@ const EmployeeInfoForm:React.FC<EmployeeInfoFormProps> = ({ employee }: Employee
             }
     
             console.log('Employee added successfully:', data);
-            alert('Employee added successfully');
+            // alert('Employee added successfully');
+            onSuccess();
     
             setFormData({
                 firstName: '',

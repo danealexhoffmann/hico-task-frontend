@@ -26,6 +26,7 @@ export default function EmployeeTable() {
   const [data, setData] = useState<ApiResponse | null>(null);
   const [loading, setLoading] = useState<boolean>(true);
   const [error, setError] = useState<string | null>(null);
+  const [refresh, setRefresh] = useState<boolean>(false);
   const [selectedEmployee, setSelectedEmployee] = useState<any | null>(null);
 
   useEffect(() => {
@@ -48,10 +49,14 @@ export default function EmployeeTable() {
     }
 
     fetchData();
-  }, [])
+  }, [refresh])
 
   if (loading) return <div>Loading...</div>;
   if (error) return <div>Error: {error}</div>;
+
+  const refreshTable = () => {
+    setRefresh(prev => !prev);
+  };
 
   return (
     <Container sx={{ display:'flex', flexDirection: 'column', gap: '16px' }}>
@@ -87,7 +92,7 @@ export default function EmployeeTable() {
       </div>
            <Box sx={{ border: '1px solid #e5e5e5', padding: '20px', borderRadius: '8px' }}>
            <Stack gap={2}>
-           <EmployeeInfoForm employee={selectedEmployee} />
+           <EmployeeInfoForm employee={selectedEmployee} onSuccess={refreshTable} />
            </Stack>
          </Box>
     </Container>
