@@ -1,6 +1,5 @@
 import { useState, useEffect } from 'react';
-import AddEmployeeForm from './AddEmployeeForm';
-import UpdateEmployeeForm from './UpdateEmployeeForm';
+import EmployeeInfoForm from './EmployeeInfoForm';
 import { styled } from '@mui/material';
 import { Container, TableContainer, Table, TableHead, TableBody, TableRow, TableCell, Box, Button, Typography, Stack } from '@mui/material';
 
@@ -27,8 +26,6 @@ export default function EmployeeTable() {
   const [data, setData] = useState<ApiResponse | null>(null);
   const [loading, setLoading] = useState<boolean>(true);
   const [error, setError] = useState<string | null>(null);
-  const [showAddEmployeeForm, setShowAddEmployeeForm] = useState<boolean>(false);
-  const [showUpdateEmployeeForm, setShowUpdateEmployeeForm] = useState<boolean>(false);
   const [selectedEmployee, setSelectedEmployee] = useState<any | null>(null);
 
   useEffect(() => {
@@ -53,18 +50,6 @@ export default function EmployeeTable() {
     fetchData();
   }, [])
 
-  const handleEmployeeFormDisplay = (formToDisplay: string, employee: any) => {
-    if (formToDisplay === 'add') {
-      setShowAddEmployeeForm(true);
-      setShowUpdateEmployeeForm(false);
-    } else if (formToDisplay === 'update' && employee) {
-      setShowUpdateEmployeeForm(true);
-      setShowAddEmployeeForm(false);
-
-      setSelectedEmployee(employee);
-    }
-  } 
-
   if (loading) return <div>Loading...</div>;
   if (error) return <div>Error: {error}</div>;
 
@@ -73,7 +58,7 @@ export default function EmployeeTable() {
       <div>
       <Box sx={{ display: 'flex', flexDirection: 'row', justifyContent: 'space-between', alignItems: 'center', marginBottom: '16px' }}>
         <Typography variant='subtitle2'>Current Employees</Typography>
-        <Button variant='contained' onClick={() => handleEmployeeFormDisplay('add', null)}>add employee</Button>
+        <Button variant='contained' onClick={() => {alert('push data to db')}}>add employee</Button>
       </Box>
       <TableContainer>
         <Table>
@@ -88,7 +73,7 @@ export default function EmployeeTable() {
           </StyledTableHead>
           <TableBody>
             {data?.message.map(item =>
-              <TableRow onClick={() => handleEmployeeFormDisplay('update', item)} key={item.id} sx={{ backgroundColor: getDisplayColor(item.profile_colour), cursor: 'pointer' }}>
+              <TableRow onClick={() => setSelectedEmployee(item)} key={item.id} sx={{ backgroundColor: getDisplayColor(item.profile_colour), cursor: 'pointer' }}>
                 <TableCell>{item.employee_number}</TableCell>
                 <TableCell>{item.first_name}</TableCell>
                 <TableCell>{item.last_name}</TableCell>
@@ -100,20 +85,11 @@ export default function EmployeeTable() {
         </Table>
       </TableContainer>
       </div>
-      {showAddEmployeeForm && (
-        <Box sx={{ border: '1px solid #e5e5e5', padding: '20px', borderRadius: '8px' }}>
-          <Stack gap={2}>
-          <AddEmployeeForm />
-          </Stack>
-        </Box>
-      )}
-      {showUpdateEmployeeForm && (
-        <Box sx={{ border: '1px solid #e5e5e5', padding: '20px', borderRadius: '8px' }}>
-          <Stack gap={2}>
-          <UpdateEmployeeForm employee={selectedEmployee} />
-          </Stack>
-        </Box>
-      )}
+           <Box sx={{ border: '1px solid #e5e5e5', padding: '20px', borderRadius: '8px' }}>
+           <Stack gap={2}>
+           <EmployeeInfoForm employee={selectedEmployee} />
+           </Stack>
+         </Box>
     </Container>
   )
 }

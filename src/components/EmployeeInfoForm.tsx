@@ -2,7 +2,7 @@ import { useState, useEffect } from 'react';
 import { Typography, Grid, TextField, FormControl, InputLabel, Select, MenuItem, FormLabel, FormControlLabel, RadioGroup, Radio, Box, Button, Stack } from '@mui/material';
 import { SelectChangeEvent } from '@mui/material/Select';
 
-type UpdateEmployeeFormProps = {
+type EmployeeInfoFormProps = {
     employee: {
         id: number;
         first_name: string;
@@ -31,22 +31,22 @@ const getDisplayColor = (dbColor: string): string => {
     return colorMap[dbColor] || dbColor;
   };
 
-const UpdateEmployeeForm:React.FC<UpdateEmployeeFormProps> = ({ employee }: UpdateEmployeeFormProps ) => {
+const EmployeeInfoForm:React.FC<EmployeeInfoFormProps> = ({ employee }: EmployeeInfoFormProps ) => {
+
+    const [formData, setFormData] = useState({
+        firstName: '',
+        lastName: '',
+        salutation: '',
+        gender: '',
+        employeeNumber: 0,
+        grossSalary: '',
+        profileColour: 'none',
+    })
 
     const formatSalaryValue = (salaryString: string) => {
         const formattedString = salaryString.replace(/\B(?=(\d{3})+(?!\d))/g, ' ');
         return formattedString;
     } 
-
-    const [formData, setFormData] = useState({
-        firstName: employee.first_name,
-        lastName: employee.last_name,
-        salutation: employee.salutation,
-        gender: employee.gender,
-        employeeNumber: employee.employee_number,
-        grossSalary: formatSalaryValue(employee.gross_salary),
-        profileColour: employee.profile_colour
-    })
 
     useEffect(() => {
         if (employee) {
@@ -59,7 +59,7 @@ const UpdateEmployeeForm:React.FC<UpdateEmployeeFormProps> = ({ employee }: Upda
                 grossSalary: formatSalaryValue(employee.gross_salary),
                 profileColour: employee.profile_colour
             });
-        }
+        } 
     }, [employee]);
 
   const handleInputChange = (e: React.ChangeEvent<HTMLInputElement>) => {
@@ -126,57 +126,120 @@ const UpdateEmployeeForm:React.FC<UpdateEmployeeFormProps> = ({ employee }: Upda
   
   const handleSubmit = async (e: React.FormEvent) => {
     e.preventDefault();
-  
-    const updatedEmployeeData = {
-        id: employee.id,
-        firstName: formData.firstName,
-        lastName: formData.lastName,
-        salutation: formData.salutation,
-        gender: formData.gender,
-        employeeNumber: formData.employeeNumber,
-        grossSalary: formData.grossSalary,
-        profileColour: formData.profileColour
-    }
 
-    try {
-        const response = await fetch(`/api/employees/${employee.id}`, {
-            method: 'PUT',
-            headers: {
-                'Content-Type': 'application/json',
-            },
-            body: JSON.stringify(updatedEmployeeData),
-        });
+    if (employee) {
 
-        const data: ApiResponse = await response.json();
-        if (!response.ok) {
-            throw new Error(data.error || 'Failed to update employee');
+        //Update current employee data
+
+        const updatedEmployeeData = {
+            id: employee.id,
+            firstName: formData.firstName,
+            lastName: formData.lastName,
+            salutation: formData.salutation,
+            gender: formData.gender,
+            employeeNumber: formData.employeeNumber,
+            grossSalary: formData.grossSalary,
+            profileColour: formData.profileColour
         }
-        alert('Employee updated successfully');
-        console.log('Employee updated successfully:', data);
-        
-    } catch (error) {
-        console.error('Error adding employee:', error);
-        alert('Failed to update employee. Please try again.');
+    
+        try {
+            const response = await fetch(`/api/employees/${employee.id}`, {
+                method: 'PUT',
+                headers: {
+                    'Content-Type': 'application/json',
+                },
+                body: JSON.stringify(updatedEmployeeData),
+            });
+    
+            const data: ApiResponse = await response.json();
+            if (!response.ok) {
+                throw new Error(data.error || 'Failed to update employee');
+            }
+            alert('Employee updated successfully');
+            console.log('Employee updated successfully:', data);
+            
+        } catch (error) {
+            console.error('Error adding employee:', error);
+            alert('Failed to update employee. Please try again.');
+        }
+    } else {
+        // Submit new employee data
+
+        const newEmployeeData = {
+            firstName: formData.firstName,
+            lastName: formData.lastName,
+            salutation: formData.salutation,
+            gender: formData.gender,
+            employeeNumber: formData.employeeNumber,
+            grossSalary: formData.grossSalary,
+            profileColour: formData.profileColour
+        }
+    
+        try {
+            const response = await fetch('/api/employees', {
+                method: 'POST',
+                headers: {
+                    'Content-Type': 'application/json',
+                },
+                body: JSON.stringify(newEmployeeData),
+            });
+    
+            const data: ApiResponse = await response.json();
+            if (!response.ok) {
+                throw new Error(data.error || 'Failed to add employee');
+            }
+    
+            console.log('Employee added successfully:', data);
+            alert('Employee added successfully');
+    
+            setFormData({
+                firstName: '',
+                lastName: '',
+                salutation: '',
+                gender: '',
+                employeeNumber: 0,
+                grossSalary: '',
+                profileColour: 'none'
+            })
+        } catch (error) {
+            console.error('Error adding employee:', error);
+            alert('Failed to add employee. Please try again.');
+        }
     }
+  
+   
 };
 
   const handleReset = () => {
-    setFormData({
-        firstName: employee.first_name,
-        lastName: employee.last_name,
-        salutation: employee.salutation,
-        gender: employee.gender,
-        employeeNumber: employee.employee_number,
-        grossSalary: employee.gross_salary,
-        profileColour: employee.profile_colour
-    });
+
+    if (employee) {
+        setFormData({
+            firstName: employee.first_name,
+            lastName: employee.last_name,
+            salutation: employee.salutation,
+            gender: employee.gender,
+            employeeNumber: employee.employee_number,
+            grossSalary: formatSalaryValue(employee.gross_salary),
+            profileColour: employee.profile_colour
+        });
+    } else {
+       setFormData({
+        firstName: '',
+        lastName: '',
+        salutation: '',
+        gender: '',
+        employeeNumber: 0,
+        grossSalary: '',
+        profileColour: 'none',
+       }); 
+    }
   }
 
     return (
     <>
         <form onSubmit={handleSubmit}>
         <Box sx={{ display: 'flex', flexDirection: 'row', justifyContent: 'space-between', alignItems: 'center', marginBottom: '16px' }}>
-            <Typography variant="subtitle2">Update Employee</Typography>
+            <Typography variant="subtitle2">Employee Information</Typography>
             <div>
             <Button onClick={handleReset}>Cancel</Button>
             <Button
@@ -282,4 +345,4 @@ const UpdateEmployeeForm:React.FC<UpdateEmployeeFormProps> = ({ employee }: Upda
     </>)
 }
 
-export default UpdateEmployeeForm;
+export default EmployeeInfoForm;
