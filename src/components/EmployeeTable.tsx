@@ -104,7 +104,6 @@ export default function EmployeeTable() {
         <Box sx={{ border: '1px solid #e5e5e5', padding: '20px', borderRadius: '8px' }}>
           <Stack gap={2}>
           <AddEmployeeForm />
-          <Button variant="contained" onClick={() => setShowAddEmployeeForm(false)}>Close</Button>
           </Stack>
         </Box>
       )}
@@ -112,7 +111,6 @@ export default function EmployeeTable() {
         <Box sx={{ border: '1px solid #e5e5e5', padding: '20px', borderRadius: '8px' }}>
           <Stack gap={2}>
           <UpdateEmployeeForm employee={selectedEmployee} />
-          <Button variant="contained" onClick={() => setShowUpdateEmployeeForm(false)}>Close</Button>
           </Stack>
         </Box>
       )}
