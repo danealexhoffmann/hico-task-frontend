@@ -1,6 +1,10 @@
-import { useState, useEffect } from 'react';
+import { useState, useEffect, forwardRef, useImperativeHandle } from 'react';
 import { Typography, Grid, TextField, FormControl, InputLabel, Select, MenuItem, FormLabel, FormControlLabel, RadioGroup, Radio, Box, Button, Stack } from '@mui/material';
 import { SelectChangeEvent } from '@mui/material/Select';
+
+export type EmployeeInfoFormHandle = {
+    submitForm: () => void;
+}
 
 type EmployeeInfoFormProps = {
     employee: {
@@ -9,10 +13,10 @@ type EmployeeInfoFormProps = {
         last_name: string;
         salutation: 'Dr' | 'Mr' | 'Mrs' | 'Ms' | 'Mx';
         gender: 'male' | 'female' | 'unspecified';
-        employee_number: number; 
+        employee_number: number;
         gross_salary: string;
         profile_colour: 'green' | 'blue' | 'red' | 'none';
-    }
+    } | null;
     onSuccess: () => void;
 };
 
@@ -24,15 +28,15 @@ type ApiResponse = {
 
 const getDisplayColor = (dbColor: string): string => {
     const colorMap: Record<string, string> = {
-      'red': '#ffcccc', 
+      'red': '#ffcccc',
       'green': '#ccffcc',
       'blue': '#ccccff',
     };
-    
+
     return colorMap[dbColor] || dbColor;
   };
 
-const EmployeeInfoForm:React.FC<EmployeeInfoFormProps> = ({ employee, onSuccess }: EmployeeInfoFormProps ) => {
+const EmployeeInfoForm = forwardRef<EmployeeInfoFormHandle, EmployeeInfoFormProps>(({ employee, onSuccess }, ref) => {
 
     const [formData, setFormData] = useState({
         firstName: '',
@@ -47,7 +51,7 @@ const EmployeeInfoForm:React.FC<EmployeeInfoFormProps> = ({ employee, onSuccess 
     const formatSalaryValue = (salaryString: string) => {
         const formattedString = salaryString.replace(/\B(?=(\d{3})+(?!\d))/g, ' ');
         return formattedString;
-    } 
+    }
 
     useEffect(() => {
         if (employee) {
@@ -60,7 +64,7 @@ const EmployeeInfoForm:React.FC<EmployeeInfoFormProps> = ({ employee, onSuccess 
                 grossSalary: formatSalaryValue(employee.gross_salary),
                 profileColour: employee.profile_colour
             });
-        } 
+        }
     }, [employee]);
 
   const handleInputChange = (e: React.ChangeEvent<HTMLInputElement>) => {
@@ -71,17 +75,17 @@ const EmployeeInfoForm:React.FC<EmployeeInfoFormProps> = ({ employee, onSuccess 
             ...prev,
             [name]: value ? parseFloat(value) : 0
         }));
-    } 
+    }
     else if (name === 'grossSalary') {
 
         const numericString = value.replace(/[^\d]/g, '');
         const formattedNumericString = formatSalaryValue(numericString);
-        
+
         setFormData(prev => ({
             ...prev,
             [name]: formattedNumericString
         }));
-    } 
+    }
     else {
     const sanitizedValue = value.replace(/[^a-zA-Z\s\-\u00C0-\u024F]/g, '');
     setFormData(prev => ({
@@ -124,7 +128,7 @@ const EmployeeInfoForm:React.FC<EmployeeInfoFormProps> = ({ employee, onSuccess 
       [name]: value
     }));
   };
-  
+
   const handleSubmit = async (e: React.FormEvent) => {
     e.preventDefault();
 
@@ -142,7 +146,7 @@ const EmployeeInfoForm:React.FC<EmployeeInfoFormProps> = ({ employee, onSuccess 
             grossSalary: formData.grossSalary,
             profileColour: formData.profileColour
         }
-    
+
         try {
             const response = await fetch(`/api/employees/${employee.id}`, {
                 method: 'PUT',
@@ -151,7 +155,7 @@ const EmployeeInfoForm:React.FC<EmployeeInfoFormProps> = ({ employee, onSuccess 
                 },
                 body: JSON.stringify(updatedEmployeeData),
             });
-    
+
             const data: ApiResponse = await response.json();
             if (!response.ok) {
                 throw new Error(data.error || 'Failed to update employee');
@@ -159,7 +163,7 @@ const EmployeeInfoForm:React.FC<EmployeeInfoFormProps> = ({ employee, onSuccess 
             // alert('Employee updated successfully');
             onSuccess();
             console.log('Employee updated successfully:', data);
-            
+
         } catch (error) {
             console.error('Error adding employee:', error);
             alert('Failed to update employee. Please try again.');
@@ -176,7 +180,7 @@ const EmployeeInfoForm:React.FC<EmployeeInfoFormProps> = ({ employee, onSuccess 
             grossSalary: formData.grossSalary,
             profileColour: formData.profileColour
         }
-    
+
         try {
             const response = await fetch('/api/employees', {
                 method: 'POST',
@@ -185,16 +189,16 @@ const EmployeeInfoForm:React.FC<EmployeeInfoFormProps> = ({ employee, onSuccess 
                 },
                 body: JSON.stringify(newEmployeeData),
             });
-    
+
             const data: ApiResponse = await response.json();
             if (!response.ok) {
                 throw new Error(data.error || 'Failed to add employee');
             }
-    
+
             console.log('Employee added successfully:', data);
             // alert('Employee added successfully');
             onSuccess();
-    
+
             setFormData({
                 firstName: '',
                 lastName: '',
@@ -209,8 +213,8 @@ const EmployeeInfoForm:React.FC<EmployeeInfoFormProps> = ({ employee, onSuccess 
             alert('Failed to add employee. Please try again.');
         }
     }
-  
-   
+
+
 };
 
   const handleReset = () => {
@@ -234,9 +238,15 @@ const EmployeeInfoForm:React.FC<EmployeeInfoFormProps> = ({ employee, onSuccess 
         employeeNumber: 0,
         grossSalary: '',
         profileColour: 'none',
-       }); 
+       });
     }
   }
+
+  useImperativeHandle(ref, () => ({
+    submitForm: () => {
+        handleSubmit({ preventDefault: () => {} } as React.FormEvent);
+    }
+}));
 
     return (
     <>
@@ -286,12 +296,12 @@ const EmployeeInfoForm:React.FC<EmployeeInfoFormProps> = ({ employee, onSuccess 
                             <MenuItem value="Mrs">Mrs</MenuItem>
                             <MenuItem value="Ms">Ms</MenuItem>
                             <MenuItem value="Mx">Mx</MenuItem>
-                        </Select> 
+                        </Select>
                     </FormControl>
                     <FormControl component="fieldset">
                         <FormLabel component="legend">Gender</FormLabel>
-                        <RadioGroup 
-                            name="gender" 
+                        <RadioGroup
+                            name="gender"
                             value={formData.gender}
                             onChange={handleRadioChange}
                             row
@@ -299,7 +309,7 @@ const EmployeeInfoForm:React.FC<EmployeeInfoFormProps> = ({ employee, onSuccess 
                             <FormControlLabel value="male" control={<Radio />} label="Male"/>
                             <FormControlLabel value="female" control={<Radio />} label="Female"/>
                             <FormControlLabel value="unspecified" control={<Radio />} label="Unspecified"/>
-                        </RadioGroup> 
+                        </RadioGroup>
                     </FormControl>
                     <TextField
                         label="Employee #"
@@ -319,18 +329,18 @@ const EmployeeInfoForm:React.FC<EmployeeInfoFormProps> = ({ employee, onSuccess 
                         value={`${formData.firstName} ${formData.lastName}`}
                         disabled
                         fullWidth
-                    /> 
+                    />
                      <TextField
                         label="Gross Salary $PY"
                         name="grossSalary"
                         value={formData.grossSalary}
                         onChange={handleInputChange}
                         fullWidth
-                    /> 
+                    />
                     <FormControl component="fieldset">
                         <FormLabel component="legend">Profile Color</FormLabel>
-                        <RadioGroup 
-                            name="profileColour" 
+                        <RadioGroup
+                            name="profileColour"
                             value={formData.profileColour}
                             onChange={handleRadioChange}
                             row
@@ -339,13 +349,13 @@ const EmployeeInfoForm:React.FC<EmployeeInfoFormProps> = ({ employee, onSuccess 
                             <FormControlLabel value="blue" control={<Radio />} label="Blue"/>
                             <FormControlLabel value="red" control={<Radio />} label="Red"/>
                             <FormControlLabel value="none" control={<Radio />} label="Default"/>
-                        </RadioGroup> 
+                        </RadioGroup>
                     </FormControl>
                     </Stack>
                 </Grid>
             </Grid>
         </form>
     </>)
-}
+});
 
 export default EmployeeInfoForm;
