@@ -26,7 +26,7 @@ type ApiResponse = {
     error?: string;
 }
 
-const getDisplayColor = (dbColor: string): string => {
+export const getDisplayColor = (dbColor: string): string => {
     const colorMap: Record<string, string> = {
       'red': '#ffcccc',
       'green': '#ccffcc',
