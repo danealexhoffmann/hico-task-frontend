@@ -11,7 +11,7 @@ const StyledTableHead = styled(TableHead)({
   backgroundColor: '#f5f5f5',
 });
 
-const getDisplayColor = (dbColor: string): string => {
+export const getDisplayColor = (dbColor: string): string => {
   const colorMap: Record<string, string> = {
     'red': '#ffcccc',
     'green': '#ccffcc',
@@ -60,8 +60,8 @@ export default function EmployeeTable() {
   };
 
   const handleAddEmployee = () => {
-    setSelectedEmployee(null); // Clear any selected employee
-    formRef.current?.submitForm(); // Call the form's submit method
+    setSelectedEmployee(null);
+    formRef.current?.submitForm();
   };
 
   return (
