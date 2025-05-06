@@ -36,6 +36,11 @@ export const getDisplayColor = (dbColor: string): string => {
     return colorMap[dbColor] || dbColor;
   };
 
+export const formatSalaryValue = (salaryString: string) => {
+    const formattedString = salaryString.replace(/\B(?=(\d{3})+(?!\d))/g, ' ');
+    return formattedString;
+}
+
 const EmployeeInfoForm = forwardRef<EmployeeInfoFormHandle, EmployeeInfoFormProps>(({ employee, onSuccess }, ref) => {
 
     const [formData, setFormData] = useState({
@@ -48,10 +53,7 @@ const EmployeeInfoForm = forwardRef<EmployeeInfoFormHandle, EmployeeInfoFormProp
         profileColour: 'none',
     })
 
-    const formatSalaryValue = (salaryString: string) => {
-        const formattedString = salaryString.replace(/\B(?=(\d{3})+(?!\d))/g, ' ');
-        return formattedString;
-    }
+
 
     useEffect(() => {
         if (employee) {
