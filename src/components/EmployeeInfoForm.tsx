@@ -160,9 +160,7 @@ const EmployeeInfoForm = forwardRef<EmployeeInfoFormHandle, EmployeeInfoFormProp
             if (!response.ok) {
                 throw new Error(data.error || 'Failed to update employee');
             }
-            // alert('Employee updated successfully');
             onSuccess();
-            console.log('Employee updated successfully:', data);
 
         } catch (error) {
             console.error('Error adding employee:', error);
@@ -194,9 +192,6 @@ const EmployeeInfoForm = forwardRef<EmployeeInfoFormHandle, EmployeeInfoFormProp
             if (!response.ok) {
                 throw new Error(data.error || 'Failed to add employee');
             }
-
-            console.log('Employee added successfully:', data);
-            // alert('Employee added successfully');
             onSuccess();
 
             setFormData({
@@ -248,7 +243,7 @@ const EmployeeInfoForm = forwardRef<EmployeeInfoFormHandle, EmployeeInfoFormProp
     }
 }));
 
-    return (
+   return (
     <>
         <form onSubmit={handleSubmit}>
         <Box sx={{ display: 'flex', flexDirection: 'row', justifyContent: 'space-between', alignItems: 'center', marginBottom: '16px' }}>

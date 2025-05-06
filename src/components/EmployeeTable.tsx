@@ -41,7 +41,6 @@ export default function EmployeeTable() {
         }
 
         const result: ApiResponse = await response.json();
-        console.log(result);
         setData(result);
       } catch (err) {
         setError(err instanceof Error ? err.message : 'An unknown error occured');
